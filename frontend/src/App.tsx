@@ -10,16 +10,20 @@ const App: React.FC = () => {
   const [riskAssessment, setRiskAssessment] = useState<RiskAssessment | null>(null);
 
   // Polling function to fetch orbit data
-  async function fetchOrbitData() {
-    try {
-      const response = await fetch(`${process.env.REACT_APP_API_URL}/api/orbit`);
-      const data = await response.json();
-      setOrbitData(data);
-    } catch (err) {
-      setError('Failed to fetch orbit data');
-      console.error(err);
+ async function fetchOrbitData(retries = 3) {
+  try {
+    const response = await fetch(`${process.env.REACT_APP_API_URL}/api/orbit`);
+    const data = await response.json();
+    setOrbitData(data);
+  } catch (err) {
+    if (retries > 0) {
+      setTimeout(() => fetchOrbitData(retries - 1), 3000); // retry after 3s
+    } else {
+      setError("Failed to fetch orbit data");
     }
   }
+}
+
 
   // Poll every 5 seconds
   useEffect(() => {
