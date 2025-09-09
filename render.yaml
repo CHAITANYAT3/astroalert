@@ -1,0 +1,29 @@
+services:
+  # Backend API service
+  - type: web
+    name: astroalert-api
+    env: python
+    buildCommand: cd backend && pip install -r requirements.txt
+    startCommand: cd backend && uvicorn app.main:app --host 0.0.0.0 --port $PORT
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.8.0
+      - key: DATABASE_URL
+        fromDatabase:
+          name: astroalert-db
+          property: connectionString
+
+  # Frontend service
+  - type: web
+    name: astroalert-frontend
+    env: static
+    buildCommand: cd frontend && npm install && npm run build
+    staticPublishPath: ./frontend/build
+    envVars:
+      - key: REACT_APP_API_URL
+        value: https://astroalert-api.onrender.com
+
+databases:
+  - name: astroalert-db
+    databaseName: astroalert
+    user: astroalert
