@@ -12,7 +12,7 @@ const App: React.FC = () => {
   useEffect(() => {
     if (selectedObject) {
       // Fetch risk assessment from backend
-      fetch(`http://localhost:8000/api/satellites/${selectedObject.id}/risk`)
+  fetch(`${process.env.REACT_APP_API_URL}/api/satellites/${selectedObject.id}/risk`)
         .then(res => res.json())
         .then(data => setRiskAssessment(data))
         .catch(err => console.error('Failed to fetch risk assessment:', err));
