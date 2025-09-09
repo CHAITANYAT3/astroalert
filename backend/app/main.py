@@ -4,7 +4,9 @@ from fastapi.middleware.cors import CORSMiddleware
 from app.ws.orbit_stream import orbit_streamer
 from app.api.routes import router as api_router
 from app.database import engine, Base
-
+from dotenv import load_dotenv
+load_dotenv()
+SECRET_KEY = os.getenv("SECRET_KEY")
 app = FastAPI(title="AstroAlert API")
 
 # ✅ Create DB tables on startup
